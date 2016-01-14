@@ -1,0 +1,6 @@
+*.pyc
+*.swp
+.vagrant
+env
+build
+frontend/build/node_modules
