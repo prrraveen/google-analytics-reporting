@@ -1,6 +1,16 @@
 *.pyc
 *.swp
 .vagrant
+
+
+# don't track virtualenv
 env
+
+# don't track vagrant build
 build
+
+# don't track bower packages
+frontend/assets/libs
+
+# don't track npm packages
 frontend/build/node_modules

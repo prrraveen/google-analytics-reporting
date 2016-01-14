@@ -1,0 +1,44 @@
+<div class="container">
+    <div class="row">
+        <div class='col-sm-12'>
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                  <div class="row">
+                      <div class='col-sm-6'>
+                          <h3><%= user.get_name() %></h3>
+                      </div>
+                      <div class="col-sm-6 text-right">
+                          <button type="button" class="btn btn-primary">
+                              <span class='glyphicon glyphicon-thumbs-up'></span>
+                              Like
+                          </button>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="panel-body">
+                  <div>
+
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                      <li role="presentation" class="active"><a href="#page-views" aria-controls="page-views" role="tab" data-toggle="tab">Page Views</a></li>
+                      <li role="presentation"><a href="#likes" aria-controls="likes" role="tab" data-toggle="tab">Likes</a></li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                      <div role="tabpanel" class="tab-pane active" id="page-views">
+                          <div class="row">
+                              <div class='col-sm-4'>
+                                  <h3>Page Views</h3>
+                              </div>
+                          </div>
+                      </div>
+                      <div role="tabpanel" class="tab-pane" id="likes">B</div>
+                    </div>
+
+                  </div>
+              </div>
+        </div>
+    </div>
+</div>
