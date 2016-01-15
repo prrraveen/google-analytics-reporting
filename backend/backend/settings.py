@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'rest_framework',
     'user_profile',
+    'google_analytics',
 )
 
 MIDDLEWARE_CLASSES = (

@@ -7,7 +7,7 @@ function(
         Page_view
 ) {
     return Backbone.Collection.extend({
-        url: 'analytics/default',
+        url: '/analytics/default',
         model: Page_view,
     });
 });

@@ -1,4 +1,5 @@
 require.config({
+    waitSeconds : 15, //make sure it is enough to load all scripts
     paths: {
         jquery:     'assets/libs/jquery/dist/jquery',
         underscore: 'assets/libs/underscore/underscore-min',
@@ -7,6 +8,12 @@ require.config({
         bootstrap:  'assets/libs/bootstrap/dist/js/bootstrap',
         templates:  'assets/js/templates',
         google_analytics: 'assets/google_analytics',
+
+        //goog to load google graphs
+        //async,propertyParser are goog dependencies
+        async: 'assets/libs/requirejs-plugins/src/async',
+        propertyParser : 'assets/libs/requirejs-plugins/src/propertyParser',
+        goog: 'assets/libs/requirejs-plugins/src/goog',
     },
     shim: {
         'backbone': {
