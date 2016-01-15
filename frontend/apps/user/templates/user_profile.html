@@ -29,7 +29,22 @@
                     <div class="tab-content">
                       <div role="tabpanel" class="tab-pane active" id="page-views">
                           <div class="row">
-                              <div class='col-sm-4' id='gchart'>
+                              <div class='col-sm-6 text-left'>
+                                  <h3>Page Views</h3>
+                              </div>
+                              <div class='col-sm-6 text-right'>
+                                    <nav>
+                                        <ul class="pagination">
+                                            <li ><a class="pointer x-axis-duration" id='hourly'>Hourly <span class="sr-only">(current)</span></a></li>
+                                            <li class="active"><a class="pointer x-axis-duration" id='day'>Day <span class="sr-only">(current)</span></a></li>
+                                            <li><a class="pointer x-axis-duration" id='week'>Week <span class="sr-only">(current)</span></a></li>
+                                            <li><a class="pointer x-axis-duration" id='month'>Month <span class="sr-only">(current)</span></a></li>
+                                        </ul>
+                                    </nav>
+                              </div>
+                          </div>
+                          <div class="row">
+                              <div class='col-sm-12' id='gchart'>
                               </div>
                           </div>
                       </div>

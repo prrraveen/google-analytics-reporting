@@ -70,28 +70,7 @@ def get_first_profile_id(service):
 
   return None
 
-
-def get_results(service, profile_id):
-  # Use the Analytics Service Object to query the Core Reporting API
-  # for the number of sessions within the past seven days.
-  return service.data().ga().get(
-      ids='ga:' + profile_id,
-      start_date='7daysAgo',
-      end_date='today',
-      dimensions='ga:day',
-      metrics='ga:pageviews').execute()
-
-
-def print_results(results):
-  # Print data nicely for the user.
-  if results:
-    print 'View (Profile): %s' % results.get('profileInfo').get('profileName')
-    print 'Total pageviews: %s' % results.get('rows')[0][0]
-  else:
-    print 'No results found'
-
-
-def main(request):
+def main(request,type):
   # Define the auth scopes to request.
   scope = ['https://www.googleapis.com/auth/analytics.readonly']
 
@@ -106,5 +85,32 @@ def main(request):
     service_account_email)
   profile = get_first_profile_id(service)
 
-  result = simplejson.dumps(get_results(service, profile))
+  result = get_results(service, profile,type)
+  result = simplejson.dumps(result)
   return HttpResponse(result)
+
+def get_results(service, profile_id, type):
+  # Use the Analytics Service Object to query the Core Reporting API
+  # for the number of sessions within the past seven days.
+  if type == 'hourly':
+      start_date='2daysAgo'
+      dimensions='ga:hour'
+  elif type == 'day':
+      start_date='7daysAgo'
+      dimensions='ga:day'
+  elif type == 'week':
+      start_date='21daysAgo' # assuming 3 weeks
+      dimensions='ga:week'
+  elif type == 'month':
+      start_date='62daysAgo' # assuming 2 months
+      dimensions='ga:month'
+  else:
+      start_date='7daysAgo'
+      dimensions='ga:day'
+
+  return service.data().ga().get(
+      ids='ga:' + profile_id,
+      start_date=start_date,
+      end_date='today',
+      dimensions=dimensions,
+      metrics='ga:pageviews').execute()
