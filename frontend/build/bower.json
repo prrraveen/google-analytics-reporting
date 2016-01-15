@@ -1,0 +1,28 @@
+{
+  "name": "build",
+  "authors": [
+    "Praveen Singh <prrraveen@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "../assets/lib",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "backbone": "~1.2.3",
+    "bootstrap": "~3.3.5",
+    "jquery": "~2.1.4",
+    "underscore": "~1.8.3",
+    "backbone.marionette": "marionette#~2.4.3",
+    "requirejs": "~2.1.21",
+    "requirejs-plugins": "~1.0.3"
+  }
+}

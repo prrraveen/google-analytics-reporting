@@ -9,6 +9,9 @@ env
 # don't track vagrant build
 build
 
+#But don't ignore frontent build
+!frontend/build
+
 # don't track bower packages
 frontend/assets/libs
 
