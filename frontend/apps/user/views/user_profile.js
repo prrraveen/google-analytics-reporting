@@ -1,105 +1,81 @@
 define([
         'marionette',
         'apps/user/models/user',
-        'apps/user/collections/page_views',
+        'apps/user/views/view_graph',
+        'apps/user/views/like_graph',
         'bootstrap',
         'goog!visualization,1,packages:[corechart,geochart]',
-        'google_analytics',
 ],
 function(
         Mn,
         User,
-        Page_views
+        View_graph,
+        Like_graph
 ) {
-    return Mn.ItemView.extend({
-        model: new User(),
+    return Mn.LayoutView.extend({
         template: JST['user_profile'],
-        graph_type: 'day', //setting up defaul graph type
+        model: new User(),
+        initialize: function(options){
+            _.extend(this,options);
+        },
+
+        regions: {
+            page_views: "#page-views", //region to render subview page_view
+            page_likes: "#page-likes" //region to render subview page_like
+        },
+
+        ui: {
+            tabs: '.nav-tabs a',
+            hit_like: '#hit-like',
+        },
+
+        events:{
+            'click @ui.tabs': 'show_region', //change the current view displayed
+            'click @ui.hit_like': 'increment_like', //event to increment user like count
+        },
+
         templateHelpers: function() {
             return { user : this.model};
         },
 
-        ui: {
-            x_axis_duration: '.x-axis-duration',
-        },
-
-        events:{
-            'click @ui.x_axis_duration': 'change_x_axis_scale',
+        show_region: function(e){
+            if(e.target.id=='page-views-a'){
+                if(this.page_views.hasView()==false)
+                    this.page_views.show(new View_graph({username : this.username}));
+            }else{
+                if(this.page_likes.hasView()==false)
+                    this.page_likes.show(new Like_graph({username : this.username}));
+            }
         },
 
         onRender: function(){
-            this.collection = new Page_views();
-            this.get_graph_data()
-        },
-
-        get_graph_data: function(){
-
-            var _this = this;
-
-            this.collection.change_graph_type(graph_type = this.graph_type);
-            this.collection.fetch({
-                success: function(collection, response, options){
-                    _this.make_graph(data= response)
-                },
-                error: function(collection, response, options){
-                    alert('Something went wrong while gathering data');
-                },
-
-            })
-        },
-
-        make_graph: function(data){
-            this.make_data(data);
-            this.render_graph();
-        },
-
-        make_data: function(data){
-            var _this = this;
-            this.data = new google.visualization.DataTable();
-            this.data.addColumn('number', 'PageViews');
-            this.data.addColumn('number', this.graph_type);
-
-            data.rows.forEach(function(row){
-                _this.data.addRow([+row[0] , +row[1]])
-            })
-        },
-
-        render_graph: function(){
-            var options = {
-            //   title: 'Page Views',
-              width: 850,
-              height: 300,
-              legend: { position: 'bottom'   },
-              hAxis: { format: ''},
-              vAxis: { format: ''}
-            };
-
-            var container = $(this.el).find('#gchart')[0];
-            var chart = new google.visualization.LineChart(container);
-            chart.draw(this.data,options);
-        },
-
-        change_x_axis_scale: function(e){
-            /*
-                method to change the x axis scale type i.e hourly , day , week , month
+            /* A marionette method, called when el is rendered.
             */
+            if(this.page_views.hasView()==false)
+                this.page_views.show(new View_graph({username : this.username}));
 
-            this.switch_active_class(e)
-            this.graph_type = e.target.id; //get type of id
-            this.get_graph_data()
+            // Immediately add a pageview event to the queue.
+            window.ga("create", "UA-72362575-1", "none", 'myTracker');
+            ga('set', 'dimension1', +this.userid);
+            window.ga("send", "pageview");
+
+            //disable like button if the profile belongs to signin user
+            if(this.username == this.model.get_email())
+            {
+                this.ui.hit_like.attr('disabled','disabled')
+            }
         },
 
-        switch_active_class: function(e){
+        increment_like: function(){
             /*
-                this method highligts current graph type
+                increment user like count
             */
-
-            //remove active classs form li element
-            this.ui.x_axis_duration.parent().removeClass('active');
-
-            //add active class to current li element
-            $(e.target.parentElement).addClass('active')
+            var _this = this;
+            $.get(`/likes/increment/${_this.username}`)
+            .done(function(){
+                _this.ui.hit_like.attr('disabled','disabled')
+                alert('Liked')
+            })
         }
-
     })
 });

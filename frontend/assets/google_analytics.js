@@ -8,8 +8,8 @@ define(function (require) {
   window.ga.l = 1 * new Date();
 
   // Immediately add a pageview event to the queue.
-  window.ga("create", "UA-72362575-1", "none");
-  window.ga("send", "pageview");
+  // window.ga("create", "UA-72362575-1", "none");
+  // window.ga("send", "pageview");
 
   // Create a function that wraps `window.ga`.
   // This allows dependant modules to use `window.ga` without knowingly

@@ -53,3 +53,9 @@ def logout(request):
         return HttpResponse(status=200)
     except Exception,e:
         return HttpResponse(status=500)
+
+@api_view(['GET'])
+def get_all_users(request):
+    users = User.objects.all()
+    payload = UserSerializer(users, many=True)
+    return Response(payload.data)

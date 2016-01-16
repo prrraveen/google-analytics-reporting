@@ -17,7 +17,8 @@ define([
                 'signup': 'signup',
                 'signin': 'signin',
                 'logout': 'logout',
-                'user/:username': 'user_profile'
+                'user/:userid/:username': 'user_profile',
+                'users': 'user_list',
             },
 
             home: function() {
@@ -55,7 +56,7 @@ define([
                     app.router.navigate('signin', {trigger: true});
             },
 
-            user_profile: function(username) {
+            user_profile: function(userid,username) {
                 if (!this.user.logged_in()) {
                     this.navigate('signin', {trigger: true})
                     return
@@ -65,10 +66,23 @@ define([
                 ], function(Navigation,
                     User_profile) {
                     app.layout.navigation.show(new Navigation());
-                    app.layout.main_region.show(new User_profile())
+                    app.layout.main_region.show(new User_profile({userid: userid, username: username}))
                 })
             },
 
+            user_list: function() {
+                if (!this.user.logged_in()) {
+                    this.navigate('signin', {trigger: true})
+                    return
+                }
+                require(['apps/home/views/navigation',
+                    'apps/user/views/user_list',
+                ], function(Navigation,
+                    User_list) {
+                    app.layout.navigation.show(new Navigation());
+                    app.layout.main_region.show(new User_list())
+                })
+            },
         })
         return Router;
     });

@@ -1,5 +1,4 @@
 import argparse
-from django.http import HttpResponse
 import simplejson
 from apiclient.discovery import build
 from oauth2client.client import SignedJwtAssertionCredentials
@@ -8,6 +7,11 @@ import httplib2
 from oauth2client import client
 from oauth2client import file
 from oauth2client import tools
+
+from django.http import HttpResponse
+from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
+
 
 from backend.settings import BASE_DIR
 
@@ -70,26 +74,30 @@ def get_first_profile_id(service):
 
   return None
 
-def main(request,type):
-  # Define the auth scopes to request.
-  scope = ['https://www.googleapis.com/auth/analytics.readonly']
+def main(request,username,type):
+    # Define the auth scopes to request.
+    scope = ['https://www.googleapis.com/auth/analytics.readonly']
 
-  # Use the developer console and replace the values with your
-  # service account email and relative location of your key file.
-  service_account_email = 'server-side-reporting-api-test@grand-pact-118918.iam.gserviceaccount.com'
-  import os
-  PROJ_DIR =os.path.abspath(os.path.dirname(__name__))
-  key_file_location = '{base_dir}/{app}/{file}'.format(base_dir=PROJ_DIR,app='google_analytics',file='key.p12')
-  # Authenticate and construct service.
-  service = get_service('analytics', 'v3', scope, key_file_location,
+    # Use the developer console and replace the values with your
+    # service account email and relative location of your key file.
+    service_account_email = 'server-side-reporting-api-test@grand-pact-118918.iam.gserviceaccount.com'
+    import os
+    PROJ_DIR =os.path.abspath(os.path.dirname(__name__))
+    key_file_location = '{base_dir}/{app}/{file}'.format(base_dir=PROJ_DIR,app='google_analytics',file='key.p12')
+    # Authenticate and construct service.
+    service = get_service('analytics', 'v3', scope, key_file_location,
     service_account_email)
-  profile = get_first_profile_id(service)
+    profile = get_first_profile_id(service)
+    try:
+        user = User.objects.get(username=username)
+    except ObjectDoesNotExist:
+        return HttpResponse(status=503)
 
-  result = get_results(service, profile,type)
-  result = simplejson.dumps(result)
-  return HttpResponse(result)
+    result = get_results(user.id, service, profile,type)
+    result = simplejson.dumps(result)
+    return HttpResponse(result)
 
-def get_results(service, profile_id, type):
+def get_results(userid,service, profile_id, type):
   # Use the Analytics Service Object to query the Core Reporting API
   # for the number of sessions within the past seven days.
   if type == 'hourly':
@@ -108,9 +116,11 @@ def get_results(service, profile_id, type):
       start_date='7daysAgo'
       dimensions='ga:day'
 
+  filters = 'ga:dimension1=={0}'.format(userid)
   return service.data().ga().get(
       ids='ga:' + profile_id,
       start_date=start_date,
       end_date='today',
       dimensions=dimensions,
-      metrics='ga:pageviews').execute()
+      metrics='ga:pageviews',
+      filters=filters).execute()

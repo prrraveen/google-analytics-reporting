@@ -34,7 +34,7 @@ function(
                 response = JSON.parse(response)
                 var session = new Session().set_token(access_token = response.access_token )
                 _this.model.set_profile(profile = response.profile)
-                var fragment = 'user/'+ response.profile.email
+                var fragment = `/user/${response.profile.id}/${response.profile.email}`
                 app.router.navigate(fragment, { trigger : true})
             })
             .fail(function(response){

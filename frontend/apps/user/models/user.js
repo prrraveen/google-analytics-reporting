@@ -41,6 +41,12 @@ function(
                 return profile.email;
         },
 
+        get_id: function () {
+            var profile = JSON.parse(window.localStorage.getItem('profile'));
+            if(profile)
+                return profile.id;
+        },
+
         logout: function () {
             var _this = this;
             $.ajax({

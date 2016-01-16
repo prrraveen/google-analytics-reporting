@@ -38,8 +38,9 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'user_profile',
-    'google_analytics',
+    'user_profile', #user management
+    'google_analytics', # app to manage google_analytics and page views
+    'user_likes', # app to manage user likes
 )
 
 MIDDLEWARE_CLASSES = (

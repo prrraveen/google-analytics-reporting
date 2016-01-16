@@ -7,16 +7,17 @@ function(
         Page_view
 ) {
     return Backbone.Collection.extend({
-        url: '/analytics/day',
-        // model: Page_view,
-
+        initialize: function(options){
+            _.extend(this,options);
+            this.url = `/analytics/${this.username}/day`;
+        },
         change_graph_type: function(graph_type){
-            
+
             /*
                 This method is called before fetch call.
                 It sets the graph type needed to fetch.
             */
-            this.url = `/analytics/${graph_type}`;
+            this.url = `/analytics/${this.username}/${graph_type}`;
         },
 
         // parse: function(response, options){

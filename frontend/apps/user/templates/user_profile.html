@@ -8,7 +8,7 @@
                           <h3><%= user.get_name() %></h3>
                       </div>
                       <div class="col-sm-6 text-right">
-                          <button type="button" class="btn btn-primary">
+                          <button type="button" id='hit-like' class="btn btn-primary">
                               <span class='glyphicon glyphicon-thumbs-up'></span>
                               Like
                           </button>
@@ -18,37 +18,18 @@
 
               <div class="panel-body">
                   <div>
-
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
-                      <li role="presentation" class="active"><a href="#page-views" aria-controls="page-views" role="tab" data-toggle="tab">Page Views</a></li>
-                      <li role="presentation"><a href="#likes" aria-controls="likes" role="tab" data-toggle="tab">Likes</a></li>
+                      <li role="presentation" class="active"><a id='#page-views-a' href="#page-views" aria-controls="page-views" role="tab" data-toggle="tab">Page Views</a></li>
+                      <li role="presentation"><a id='page-likes-a' href="#page-likes" aria-controls="page-likes" role="tab" data-toggle="tab">Likes</a></li>
                     </ul>
 
                     <!-- Tab panes -->
                     <div class="tab-content">
                       <div role="tabpanel" class="tab-pane active" id="page-views">
-                          <div class="row">
-                              <div class='col-sm-6 text-left'>
-                                  <h3>Page Views</h3>
-                              </div>
-                              <div class='col-sm-6 text-right'>
-                                    <nav>
-                                        <ul class="pagination">
-                                            <li ><a class="pointer x-axis-duration" id='hourly'>Hourly <span class="sr-only">(current)</span></a></li>
-                                            <li class="active"><a class="pointer x-axis-duration" id='day'>Day <span class="sr-only">(current)</span></a></li>
-                                            <li><a class="pointer x-axis-duration" id='week'>Week <span class="sr-only">(current)</span></a></li>
-                                            <li><a class="pointer x-axis-duration" id='month'>Month <span class="sr-only">(current)</span></a></li>
-                                        </ul>
-                                    </nav>
-                              </div>
-                          </div>
-                          <div class="row">
-                              <div class='col-sm-12' id='gchart'>
-                              </div>
-                          </div>
                       </div>
-                      <div role="tabpanel" class="tab-pane" id="likes">B</div>
+                      <div role="tabpanel" class="tab-pane" id="page-likes">
+                      </div>
                     </div>
 
                   </div>
