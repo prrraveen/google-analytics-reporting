@@ -5,6 +5,7 @@ define([
         'apps/user/views/like_graph',
         'bootstrap',
         'goog!visualization,1,packages:[corechart,geochart]',
+        'google_analytics',
 ],
 function(
         Mn,
@@ -13,11 +14,18 @@ function(
         Like_graph
 ) {
     return Mn.LayoutView.extend({
-        template: JST['user_profile'],
-        model: new User(),
         initialize: function(options){
             _.extend(this,options);
+            // Immediately add a pageview event to the queue.
+            window.ga("create", "UA-72362575-1", "none");
+
+            ga('set', 'dimension1', this.userid);
+
+            window.ga("send", "pageview");
         },
+
+        template: JST['user_profile'],
+        model: new User(),
 
         regions: {
             page_views: "#page-views", //region to render subview page_view
@@ -53,11 +61,6 @@ function(
             */
             if(this.page_views.hasView()==false)
                 this.page_views.show(new View_graph({username : this.username}));
-
-            // Immediately add a pageview event to the queue.
-            window.ga("create", "UA-72362575-1", "none", 'myTracker');
-            ga('set', 'dimension1', +this.userid);
-            window.ga("send", "pageview");
 
             //disable like button if the profile belongs to signin user
             if(this.username == this.model.get_email())

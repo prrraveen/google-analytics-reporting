@@ -29,7 +29,7 @@ define([
             signup: function() {
 
                 if (this.user.logged_in()) {
-                    this.navigate('user/'+this.user.get_email(), {trigger: true})
+                    this.navigate(`user/${this.user.get_id()}/${this.user.get_email()}`, {trigger: true})
                     return
                 }
 
@@ -42,7 +42,7 @@ define([
             signin: function() {
 
                 if (this.user.logged_in()) {
-                    this.navigate('user/'+this.user.get_email(), {trigger: true})
+                    this.navigate(`user/${this.user.get_id()}/${this.user.get_email()}`, {trigger: true})
                     return
                 }
                 require(['apps/user/views/signin', ], function(Signin) {

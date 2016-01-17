@@ -1,7 +1,6 @@
 define([
         'marionette',
         'apps/user/collections/ga_collection',
-        'google_analytics',
 ],
 function(
         Mn,
