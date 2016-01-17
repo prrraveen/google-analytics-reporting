@@ -17,6 +17,8 @@ with (obj) {
 __p += '<nav class="navbar navbar-default">\n  <div class="container-fluid">\n    <!-- Brand and toggle get grouped for better mobile display -->\n    <div class="navbar-header">\n      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">\n        <span class="sr-only">Toggle navigation</span>\n        <span class="icon-bar"></span>\n        <span class="icon-bar"></span>\n        <span class="icon-bar"></span>\n      </button>\n      <a class="navbar-brand" href="#">Test Project</a>\n    </div>\n\n    <!-- Collect the nav links, forms, and other content for toggling -->\n    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">\n      <ul class="nav navbar-nav navbar-right">\n        <li><a href="#users">All Users</a></li>\n        <li class="dropdown">\n          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">\n              ' +
 ((__t = ( user.get_name() )) == null ? '' : __t) +
 '\n              <span class="caret"></span>\n          </a>\n          <ul class="dropdown-menu">\n              <li class="user-footer">\n                  <a href="#user/' +
+((__t = ( user.get_id() )) == null ? '' : __t) +
+'/' +
 ((__t = ( user.get_email() )) == null ? '' : __t) +
 '" class="btn btn-default btn-flat">User Profile</a>\n              </li>\n              <li class="user-footer">\n                  <a href="#logout" class="btn btn-default btn-flat">Sign out</a>\n              </li>\n          </ul>\n        </li>\n      </ul>\n    </div><!-- /.navbar-collapse -->\n  </div><!-- /.container-fluid -->\n</nav>\n';
 
@@ -28,7 +30,7 @@ this["JST"]["like_graph"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
-__p += '<div class="row">\n    <div class=\'col-sm-6 text-right\'>\n          <nav>\n              <ul class="pagination x-axis-duration">\n                  <li><a class="pointer" id=\'hourly\'>Hourly <span class="sr-only">(current)</span></a></li>\n                  <li class="active"><a class="pointer" id=\'day\'>Day <span class="sr-only">(current)</span></a></li>\n                  <li><a class="pointer" id=\'week\'>Week <span class="sr-only">(current)</span></a></li>\n                  <li><a class="pointer" id=\'month\'>Month <span class="sr-only">(current)</span></a></li>\n              </ul>\n          </nav>\n    </div>\n</div>\n<div class="row">\n    <div class=\'col-sm-12\' id=\'like-chart\'>\n    </div>\n</div>\n';
+__p += '<div class="row">\n    <div class=\'col-sm-6 text-left\'>\n        <h3>User Likes</h3>\n    </div>\n\n    <div class=\'col-sm-6 text-right\'>\n          <nav>\n              <ul class="pagination x-axis-duration">\n                  <li><a class="pointer" id=\'hourly\'>Hourly <span class="sr-only">(current)</span></a></li>\n                  <li class="active"><a class="pointer" id=\'day\'>Day <span class="sr-only">(current)</span></a></li>\n                  <li><a class="pointer" id=\'week\'>Week <span class="sr-only">(current)</span></a></li>\n                  <li><a class="pointer" id=\'month\'>Month <span class="sr-only">(current)</span></a></li>\n              </ul>\n          </nav>\n    </div>\n</div>\n<div class="row">\n    <div class=\'col-sm-12\' id=\'like-chart\'>\n    </div>\n</div>\n';
 
 }
 return __p

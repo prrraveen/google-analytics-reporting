@@ -49,11 +49,11 @@ function(
         make_data: function(data){
             var _this = this;
             this.data = new google.visualization.DataTable();
-            this.data.addColumn('number', 'PageViews');
-            this.data.addColumn('number', this.graph_type);
-
-            data.rows.forEach(function(row){
-                _this.data.addRow([+row[0] , +row[1]])
+            this.data.addColumn('string', this.graph_type);
+            this.data.addColumn('number', 'Likes');
+            this.data.addColumn('number', 'Avg Likes');
+            data.forEach(function(row){
+                _this.data.addRow([String(row[0]) , row[1] , row[2]])
             })
         },
 
@@ -67,8 +67,8 @@ function(
               vAxis: { format: ''}
             };
 
-            var container = $(this.el).find('#gchart')[0];
-            var chart = new google.visualization.LineChart(container);
+            var container = $(this.el).find('#like-chart')[0];
+            var chart = new google.visualization.ColumnChart(container);
             chart.draw(this.data,options);
         },
 

@@ -1,4 +1,6 @@
 from datetime import datetime, timedelta
+import simplejson
+
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
@@ -6,7 +8,6 @@ from django.db.models import Q
 from django.utils import timezone
 from .models import Likes
 from django.db.models import Count
-
 def increment(request,username):
     try:
         user = User.objects.get(username=username)
@@ -32,7 +33,6 @@ def like_graph(request,username,type):
         for day in xrange(3,0,-1):
             start_datetime = timezone.now() - timedelta(days=day)
             end_datetime = timezone.now() - timedelta(days=day-1)
-            import pdb; pdb.set_trace()
             user_likes , avg_user_likes = get_counts(username,start_datetime,end_datetime)
             data.append([end_datetime.day, user_likes , avg_user_likes])
 
@@ -53,6 +53,7 @@ def like_graph(request,username,type):
     else:
         return HttpResponse(status=500)
 
+    data = simplejson.dumps(data)
     return HttpResponse(data)
 
 
