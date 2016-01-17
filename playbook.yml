@@ -1,0 +1,58 @@
+---
+- hosts: all
+  sudo: yes
+  gather_facts: no
+  tasks:
+        - name: apt get update
+          apt: update_cache=yes
+
+        - name: install python3-pip
+          apt: name=python3-pip
+
+        - name: install virtual:env
+          apt: name=python-virtualenv
+
+        - name: create virtualenv
+          command: virtualenv /opt/myenv creates=/opt/myenv
+
+        - name: install git
+          apt: name=git
+
+        - name: install dependencies for postgres
+          apt: pkg={{item}}
+          with_items:
+            - libpq-dev
+            - python-dev
+            - python-psycopg2
+
+        - name: install postgres
+          apt: pkg={{item}}
+          with_items:
+            - postgresql
+            - postgresql-contrib
+
+        - name: install nginx
+          apt: name=nginx
+
+        - name: install gunicorn
+          pip: name=gunicorn virtualenv=/opt/myenv
+
+- hosts: all
+  sudo: yes
+  sudo_user: postgres
+  gather_facts: no
+
+  vars:
+    dbname: testdb
+    dbuser: testuser
+    dbpassword: password
+
+  tasks:
+      - name: create database
+        postgresql_db: name={{dbname}}
+
+      - name: grant all privilidges to user
+        postgresql_user: db={{dbname}} name={{dbuser}} password={{dbpassword}} priv=ALL
+
+      - name: ensure user does not have unnecessary privilege
+        postgresql_user: name={{dbuser}} role_attr_flags=NOSUPERUSER,NOCREATEDB

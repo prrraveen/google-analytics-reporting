@@ -101,7 +101,7 @@ def get_results(userid,service, profile_id, type):
   # Use the Analytics Service Object to query the Core Reporting API
   # for the number of sessions within the past seven days.
   if type == 'hourly':
-      start_date='2daysAgo'
+      start_date='1daysAgo'
       dimensions='ga:hour'
   elif type == 'day':
       start_date='7daysAgo'
