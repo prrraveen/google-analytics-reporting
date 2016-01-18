@@ -1,0 +1,13 @@
+server {
+    listen 80;
+    server_name 172.31.25.85;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location /frontend {
+        alias /home/ubuntu/test-project/frontend;
+    }
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/home/ubuntu/test-project/backend/backend.sock;
+    }
+}
