@@ -115,3 +115,6 @@
 
     - name: copy gunicorn config file to /etc/init/
       command: cp /home/ubuntu/test-project/config/gunicorn.conf /etc/init/gunicorn.conf creates=/etc/init/gunicorn.conf
+
+    - name: copy nginx config file to /etc/nginx/sites-available/
+      command: cp /home/ubuntu/test-project/config/test-project-nginx /etc/nginx/sites-available/test-project-nginx creates=/etc/nginx/sites-available/test-project-nginx
