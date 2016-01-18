@@ -57,16 +57,16 @@
 #       - name: ensure user does not have unnecessary privilege
 #         postgresql_user: name={{dbuser}} role_attr_flags=NOSUPERUSER,NOCREATEDB
 
-- hosts: all
-  sudo: no
-  gather_facts: no
-  vars:
-    work_dir: test-project
-    project_root: /home/ubuntu/test-project
-    hooks: /home/ubuntu/test-project.git/hooks
-    git_ssh_pub_key: /home/ubu12/.ssh
-    remote_machine_dest: /home/ubuntu/.ssh
-  tasks:
+# - hosts: all
+#   sudo: no
+#   gather_facts: no
+#   vars:
+#     work_dir: test-project
+#     project_root: /home/ubuntu/test-project
+#     hooks: /home/ubuntu/test-project.git/hooks
+#     git_ssh_pub_key: /home/ubu12/.ssh
+#     remote_machine_dest: /home/ubuntu/.ssh
+#   tasks:
     # - name: Create the Github SSH public key file
     #   copy: src="/home/ubu12/.ssh/id_rsa.pub"
     #         dest="/home/ubuntu/.ssh/id_rsa.pub"
@@ -109,11 +109,9 @@
 - hosts: all
   sudo: yes
   gather_facts: no
-  vars:
   tasks:
     # - name: Install python packages from requirment.txt
     #   pip: requirements=/home/ubuntu/test-project/requirements.txt  virtualenv=/opt/myenv
 
-    - name: create symbolic link of gunicorn config file to /etc/init/
-      file: src=/home/ubuntu/test-project/config/gunicorn.conf state=link
-           dest=/etc/init/gunicorn.conf group=ubuntu mode="u=rwx,g=rx,o=r"
+    - name: copy gunicorn config file to /etc/init/
+      command: cp /home/ubuntu/test-project/config/gunicorn.conf /etc/init/gunicorn.conf creates=/etc/init/gunicorn.conf
