@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-apt-get update
-apt-get install -y nginx
-apt-get install -y git
+# apt-get update
 apt-get install -y python3-pip
 
 # Install PostgreSQL

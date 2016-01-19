@@ -3,124 +3,160 @@
   sudo: yes
   gather_facts: no
   tasks:
-        - name: apt get update
-          apt: update_cache=yes
+        # - name: apt get update
+        #   apt: update_cache=yes
+        #
+        # - name: install python3-pip
+        #   apt: name=python3-pip
+        #
+        # - name: install virtual:env
+        #   apt: name=python-virtualenv
+        #
+        # - name: create virtualenv
+        #   command: virtualenv /opt/myenv creates=/opt/myenv
+        #
+        # - name: install git
+        #   apt: name=git
 
-        - name: install python3-pip
-          apt: name=python3-pip
+        - name: install python-openssl for google analytics oauth
+          apt: name=python-openssl
+        #
+        # - name: install dependencies for postgres
+        #   apt: pkg={{item}}
+        #   with_items:
+        #     - libpq-dev
+        #     - python-dev
+        #     - python-psycopg2
+        #
+        # - name: install postgres
+        #   apt: pkg={{item}}
+        #   with_items:
+        #     - postgresql
+        #     - postgresql-contrib
+        #
+        # - name: install nginx
+        #   apt: name=nginx
 
-        - name: install virtual:env
-          apt: name=python-virtualenv
+        # - name: install node
+        #   apt: name=nodejs
+        #
+        # - name: install npm
+        #   apt: name=npm
 
-        - name: create virtualenv
-          command: virtualenv /opt/myenv creates=/opt/myenv
+        # - name: symlink to treat node as nodejs
+        #   file: src=/usr/bin/nodejs dest=/usr/bin/node state=link
+        #   command: sudo ln -s /usr/bin/nodejs /usr/bin/node
 
-        - name: install git
-          apt: name=git
+        # - name: install bower globally
+        #   npm: name=bower global=yes
 
-        - name: install dependencies for postgres
-          apt: pkg={{item}}
-          with_items:
-            - libpq-dev
-            - python-dev
-            - python-psycopg2
-
-        - name: install postgres
-          apt: pkg={{item}}
-          with_items:
-            - postgresql
-            - postgresql-contrib
-
-        - name: install nginx
-          apt: name=nginx
-
-        - name: install gunicorn
-          pip: name=gunicorn virtualenv=/opt/myenv
+        # - name: install gunicorn
+        #   pip: name=gunicorn virtualenv=/opt/myenv
+#
+# - hosts: all
+#   sudo: yes
+#   sudo_user: postgres
+#   gather_facts: no
+#
+#   vars:
+#     dbname: testdb
+#     dbuser: testuser
+#     dbpassword: password
+#
+#   tasks:
+#       - name: create database
+#         postgresql_db: name={{dbname}}
+#
+#       - name: grant all privilidges to user
+#         postgresql_user: db={{dbname}} name={{dbuser}} password={{dbpassword}} priv=ALL
+#
+#       - name: ensure user does not have unnecessary privilege
+#         postgresql_user: name={{dbuser}} role_attr_flags=NOSUPERUSER,NOCREATEDB
+#
+# - hosts: all
+#   sudo: no
+#   gather_facts: no
+#   vars:
+#     work_dir: test-project
+#     project_root: /home/ubuntu/test-project
+#     hooks: /home/ubuntu/test-project.git/hooks
+#     git_ssh_pub_key: /home/ubu12/.ssh
+#     remote_machine_dest: /home/ubuntu/.ssh
+#   tasks:
+#     - name: Create the Github SSH public key file
+#       copy: src="/home/ubu12/.ssh/id_rsa.pub"
+#             dest="/home/ubuntu/.ssh/id_rsa.pub"
+#             mode=0644
+#             owner=ubuntu
+#             group=ubuntu
+#
+#     - name: Create the Github SSH private key file
+#       copy: src="/home/ubu12/.ssh/id_rsa"
+#             dest="/home/ubuntu/.ssh/id_rsa_github"
+#             mode=0600
+#             owner=ubuntu
+#             group=ubuntu
+#
+#     - name: Setup the Git repo
+#       sudo: no
+#       git: repo=git@bitbucket.org:pyramidtechnology/0280020703.git
+#            version=master
+#            dest="/home/ubuntu/test-project.git"
+#            accept_hostkey=yes
+#            bare=yes
+#            depth=1
+#            key_file="/home/ubuntu/.ssh/id_rsa_github"
+#
+#     - name: checkout in working directory
+#       shell: git --work-tree=/home/ubuntu/test-project --git-dir=/home/ubuntu/test-project.git checkout -f
+#
+#     - name: create post-receive file in githook
+#       file: path=/home/ubuntu/test-project.git/hooks/post-receive state=touch group=ubuntu mode="u=rwx,g=rx,o=r"
+#
+#     # Add a line to a file if it does not exist, without passing regexp
+#     - name: add executable env
+#       lineinfile: dest=/home/ubuntu/test-project.git/hooks/post-receive
+#                   line="#!/bin/sh" state=present insertbefore=BOF
+#
+#     - name: add checkout line
+#       lineinfile: dest=/home/ubuntu/test-project.git/hooks/post-receive
+#                   line="git --work-tree=/home/ubuntu/test-project --git-dir=/home/ubuntu/test-project.git checkout -f" state=present insertbefore=EOF
 
 - hosts: all
   sudo: yes
-  sudo_user: postgres
-  gather_facts: no
-
-  vars:
-    dbname: testdb
-    dbuser: testuser
-    dbpassword: password
-
-  tasks:
-      - name: create database
-        postgresql_db: name={{dbname}}
-
-      - name: grant all privilidges to user
-        postgresql_user: db={{dbname}} name={{dbuser}} password={{dbpassword}} priv=ALL
-
-      - name: ensure user does not have unnecessary privilege
-        postgresql_user: name={{dbuser}} role_attr_flags=NOSUPERUSER,NOCREATEDB
-
-- hosts: all
-  sudo: no
-  gather_facts: no
-  vars:
-    work_dir: test-project
-    project_root: /home/ubuntu/test-project
-    hooks: /home/ubuntu/test-project.git/hooks
-    git_ssh_pub_key: /home/ubu12/.ssh
-    remote_machine_dest: /home/ubuntu/.ssh
-  tasks:
-    - name: Create the Github SSH public key file
-      copy: src="/home/ubu12/.ssh/id_rsa.pub"
-            dest="/home/ubuntu/.ssh/id_rsa.pub"
-            mode=0644
-            owner=ubuntu
-            group=ubuntu
-
-    - name: Create the Github SSH private key file
-      copy: src="/home/ubu12/.ssh/id_rsa"
-            dest="/home/ubuntu/.ssh/id_rsa_github"
-            mode=0600
-            owner=ubuntu
-            group=ubuntu
-
-    - name: Setup the Git repo
-      sudo: no
-      git: repo=git@bitbucket.org:pyramidtechnology/0280020703.git
-           version=master
-           dest="/home/ubuntu/test-project.git"
-           accept_hostkey=yes
-           bare=yes
-           depth=1
-           key_file="/home/ubuntu/.ssh/id_rsa_github"
-
-    - name: checkout in working directory
-      shell: git --work-tree=/home/ubuntu/test-project --git-dir=/home/ubuntu/test-project.git checkout -f
-
-    - name: create post-receive file in githook
-      file: path=/home/ubuntu/test-project.git/hooks/post-receive state=touch group=ubuntu mode="u=rwx,g=rx,o=r"
-
-    # Add a line to a file if it does not exist, without passing regexp
-    - name: add executable env
-      lineinfile: dest=/home/ubuntu/test-project.git/hooks/post-receive
-                  line="#!/bin/sh" state=present insertbefore=BOF
-
-    - name: add checkout line
-      lineinfile: dest=/home/ubuntu/test-project.git/hooks/post-receive
-                  line="git --work-tree=/home/ubuntu/test-project --git-dir=/home/ubuntu/test-project.git checkout -f" state=present insertbefore=EOF
-
-- hosts: all
-  sudo: yes
   gather_facts: no
   tasks:
-    - name: Install python packages from requirment.txt
-      pip: requirements=/home/ubuntu/test-project/requirements.txt  virtualenv=/opt/myenv
+#     - name: Install python packages from requirment.txt
+#       pip: requirements=/home/ubuntu/test-project/requirements.txt  virtualenv=/opt/myenv
+#
+#     - name: copy gunicorn config file to /etc/init/
+#       command: cp /home/ubuntu/test-project/config/gunicorn.conf /etc/init/gunicorn.conf creates=/etc/init/gunicorn.conf
+#
+#     - name: copy nginx config file to /etc/nginx/sites-available/
+#       command: cp /home/ubuntu/test-project/config/test-project-nginx /etc/nginx/sites-available/test-project-nginx creates=/etc/nginx/sites-available/test-project-nginx
+#
+#     - name: enable the file by linking it to the sites-enabled directory
+#       command: sudo ln -s /etc/nginx/sites-available/test-project-nginx /etc/nginx/sites-enabled
+#
+    # - name: Install packages based on bower.json.
+    #   command: 'bower install chdir=/home/ubuntu/test-project/frontend/build'
 
-    - name: copy gunicorn config file to /etc/init/
-      command: cp /home/ubuntu/test-project/config/gunicorn.conf /etc/init/gunicorn.conf creates=/etc/init/gunicorn.conf
+#     - name: restart gunicorn
+#       service: name=gunicorn state=restarted
+#
+#     - name: restart service
+#       service: name=nginx state=restarted
 
-    - name: copy nginx config file to /etc/nginx/sites-available/
-      command: cp /home/ubuntu/test-project/config/test-project-nginx /etc/nginx/sites-available/test-project-nginx creates=/etc/nginx/sites-available/test-project-nginx
-
-    - name: restart gunicorn
-    - service: name=gunicorn state=restarted
-
-    - name: restart service
-    - service: name=nginx state=restarted
+# - hosts: all
+#   sudo: no
+#   gather_facts: no
+#   tasks:
+#     # - name: Install packages based on bower.json.
+#     #   bower: path=/home/ubuntu/test-project/frontend/build
+# 
+# - hosts: all
+#   sudo: yes
+#   gather_facts: no
+#   tasks:
+#     - name: Run django migrations
+#       shell: /opt/myenv/bin/python /home/ubuntu/test-project/backend/manage.py migrate
