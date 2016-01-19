@@ -118,3 +118,9 @@
 
     - name: copy nginx config file to /etc/nginx/sites-available/
       command: cp /home/ubuntu/test-project/config/test-project-nginx /etc/nginx/sites-available/test-project-nginx creates=/etc/nginx/sites-available/test-project-nginx
+
+    - name: restart gunicorn
+    - service: name=gunicorn state=restarted
+
+    - name: restart service
+    - service: name=nginx state=restarted
