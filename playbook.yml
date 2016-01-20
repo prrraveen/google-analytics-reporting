@@ -18,8 +18,6 @@
         # - name: install git
         #   apt: name=git
 
-        - name: install python-openssl for google analytics oauth
-          apt: name=python-openssl
         #
         # - name: install dependencies for postgres
         #   apt: pkg={{item}}
@@ -126,8 +124,8 @@
   sudo: yes
   gather_facts: no
   tasks:
-#     - name: Install python packages from requirment.txt
-#       pip: requirements=/home/ubuntu/test-project/requirements.txt  virtualenv=/opt/myenv
+    - name: Install python packages from requirment.txt
+      pip: requirements=/home/ubuntu/test-project/requirements.txt  virtualenv=/opt/myenv
 #
 #     - name: copy gunicorn config file to /etc/init/
 #       command: cp /home/ubuntu/test-project/config/gunicorn.conf /etc/init/gunicorn.conf creates=/etc/init/gunicorn.conf
@@ -153,7 +151,7 @@
 #   tasks:
 #     # - name: Install packages based on bower.json.
 #     #   bower: path=/home/ubuntu/test-project/frontend/build
-# 
+#
 # - hosts: all
 #   sudo: yes
 #   gather_facts: no
