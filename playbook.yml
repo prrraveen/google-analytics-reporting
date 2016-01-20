@@ -3,45 +3,43 @@
   sudo: yes
   gather_facts: no
   tasks:
-        - name: apt get update
-          apt: update_cache=yes
-
-        - name: install python3-pip
-          apt: name=python3-pip
-
-        - name: install git
-          apt: name=git
-
-
-        - name: install dependencies for postgres and cryptography
-          apt: pkg={{item}}
-          with_items:
-            - libpq-dev
-            - python-dev
-            - python-psycopg2
-            - build-essential
-            - libssl-dev
-            - libffi-dev
-
-        - name: install postgres
-          apt: pkg={{item}}
-          with_items:
-            - postgresql
-            - postgresql-contrib
-
-        - name: install nginx
-          apt: name=nginx
-
-        - name: install node
-          apt: name=nodejs
-
-        - name: install npm
-          apt: name=npm
-
-        - name: symlink to treat node as nodejs
-          file: src=/usr/bin/nodejs dest=/usr/bin/node state=link
-          command: sudo ln -s /usr/bin/nodejs /usr/bin/node
-
+        # - name: apt get update
+        #   apt: update_cache=yes
+        #
+        # # - name: install python3-pip
+        # #   apt: name=python3-pip
+        #
+        # # - name: install git
+        # #   apt: name=git
+        #
+        # - name: install dependencies for postgres and cryptography
+        #   apt: pkg={{item}}
+        #   with_items:
+        #     - libpq-dev
+        #     - python-dev
+        #     - python-psycopg2
+        #     - build-essential
+        #     - libssl-dev
+        #     - libffi-dev
+        #
+        # - name: install postgres
+        #   apt: pkg={{item}}
+        #   with_items:
+        #     - postgresql
+        #     - postgresql-contrib
+        #
+        # - name: install nginx
+        #   apt: name=nginx
+        #
+        # - name: install node
+        #   apt: name=nodejs
+        #
+        # - name: install npm
+        #   apt: name=npm
+        #
+        # - name: symlink to treat node as nodejs
+        #   file: src=/usr/bin/nodejs dest=/usr/bin/node state=link
+        #
         - name: install bower globally
           npm: name=bower global=yes
 
@@ -66,6 +64,7 @@
 #       - name: ensure user does not have unnecessary privilege
 #         postgresql_user: name={{dbuser}} role_attr_flags=NOSUPERUSER,NOCREATEDB
 #
+
 - hosts: all
   sudo: no
   gather_facts: no
@@ -119,38 +118,32 @@
   sudo: yes
   gather_facts: no
   tasks:
-        - name: get-pip.py
-          command: sudo python3 get-pip.py chdir=/home/ubuntu/test-project/config/
-
-        - name: Install virtualenv
-          pip: name=virtualenv
-
-        - name: create virtualenv
-          command: virtualenv /home/ubuntu/myenv creates=/home/ubuntu/myenv
-
+        # - name: get-pip.py
+        #   command: sudo python3 get-pip.py chdir=/home/ubuntu/test-project/config/
+        #
+        # - name: Install virtualenv
+        #   pip: name=virtualenv
+        #
+        # - name: create virtualenv
+        #   command: virtualenv /home/ubuntu/myenv creates=/home/ubuntu/myenv
+        #
         - name: install gunicorn
           pip: name=gunicorn virtualenv=/home/ubuntu/myenv
+        #
+        # - name: Install python packages from requirment.txt
+        #   pip: requirements=/home/ubuntu/test-project/requirements.txt  virtualenv=/home/ubuntu/myenv
+        #
+        # - name: copy gunicorn config file to /etc/init/
+        #   command: cp /home/ubuntu/test-project/config/gunicorn.conf /etc/init/gunicorn.conf creates=/etc/init/gunicorn.conf
+        #
+        # - name: copy nginx config file to /etc/nginx/sites-available/
+        #   command: cp /home/ubuntu/test-project/config/test-project-nginx /etc/nginx/sites-available/test-project-nginx creates=/etc/nginx/sites-available/test-project-nginx
 
-        - name: Install python packages from requirment.txt
-          pip: requirements=/home/ubuntu/test-project/requirements.txt  virtualenv=/home/ubuntu/myenv
+        # - name: enable the file by linking it to the sites-enabled directory
+        #   file: src=/etc/nginx/sites-available/test-project-nginx dest=/etc/nginx/sites-enabled/test-project-nginx state=link
 
-        - name: copy gunicorn config file to /etc/init/
-          command: cp /home/ubuntu/test-project/config/gunicorn.conf /etc/init/gunicorn.conf creates=/etc/init/gunicorn.conf
-
-        - name: copy nginx config file to /etc/nginx/sites-available/
-          command: cp /home/ubuntu/test-project/config/test-project-nginx /etc/nginx/sites-available/test-project-nginx creates=/etc/nginx/sites-available/test-project-nginx
-
-        - name: enable the file by linking it to the sites-enabled directory
-          command: sudo ln -s /etc/nginx/sites-available/test-project-nginx /etc/nginx/sites-enabled
-
-        - name: Install packages based on bower.json.
-          command: 'bower install chdir=/home/ubuntu/test-project/frontend/build'
-
-        - name: restart gunicorn
-          service: name=gunicorn state=restarted
-
-        - name: restart service
-          service: name=nginx state=restarted
+        - name: Run django migrations
+          shell: /home/ubuntu/myenv/bin/python /home/ubuntu/test-project/backend/manage.py migrate
 
 - hosts: all
   sudo: no
@@ -163,5 +156,8 @@
   sudo: yes
   gather_facts: no
   tasks:
-    - name: Run django migrations
-      shell: /opt/myenv/bin/python /home/ubuntu/test-project/backend/manage.py migrate
+        - name: restart gunicorn
+          service: name=gunicorn state=restarted
+
+        - name: restart service
+          service: name=nginx state=restarted
