@@ -2,71 +2,72 @@
   sudo: yes
   gather_facts: no
   tasks:
-        # - name: apt get update
-        #   apt: update_cache=yes
-        #
-        # - name: install cryptography dependencies
-        #   apt: pkg={{item}}
-        #   with_items:
-        #     - build-essential
-        #     - libssl-dev
-        #     - libffi-dev
-        #     - python-dev
+        - name: apt get update
+          apt: update_cache=yes
 
-        #
-        # - name: install python3-pip
-        #   apt: name=python3-pip
-        #
-        # - name: get-pip.py
-        #   command: sudo python3 get-pip.py chdir=/vagrant/config/
+        - name: install cryptography dependencies
+          apt: pkg={{item}}
+          with_items:
+            - build-essential
+            - libssl-dev
+            - libffi-dev
+            - python-dev
 
-        # - name: Install virtualenv
-        #   pip: name=virtualenv
 
-        # - name: install dependencies for postgres
-        #   apt: pkg={{item}}
-        #   with_items:
-        #     - libpq-dev
-        #     - python-dev
-        #     - python-psycopg2
-        #
-        # - name: install postgres
-        #   apt: pkg={{item}}
-        #   with_items:
-        #     - postgresql
-        #     - postgresql-contrib
-#
-#
-# - hosts: all
-#   sudo: yes
-#   sudo_user: postgres
-#   gather_facts: no
-#
-#   vars:
-#     dbname: testdb
-#     dbuser: testuser
-#     dbpassword: password
-#
-#   tasks:
-#       - name: create database
-#         postgresql_db: name={{dbname}}
-#
-#       - name: grant all privilidges to user
-#         postgresql_user: db={{dbname}} name={{dbuser}} password={{dbpassword}} priv=ALL
-#
-#       - name: ensure user does not have unnecessary privilege
-#         postgresql_user: name={{dbuser}} role_attr_flags=NOSUPERUSER,NOCREATEDB
+        - name: install python3-pip
+          apt: name=python3-pip
+
+        - name: get-pip.py
+          command: sudo python3 get-pip.py chdir=/vagrant/config/
+
+        - name: Install virtualenv
+          pip: name=virtualenv
+
+        - name: install dependencies for postgres
+          apt: pkg={{item}}
+          with_items:
+            - libpq-dev
+            - python-dev
+            - python-psycopg2
+
+        - name: install postgres
+          apt: pkg={{item}}
+          with_items:
+            - postgresql
+            - postgresql-contrib
+
+
+- hosts: all
+  sudo: yes
+  sudo_user: postgres
+  gather_facts: no
+
+  vars:
+    dbname: testdb
+    dbuser: testuser
+    dbpassword: password
+
+  tasks:
+      - name: create database
+        postgresql_db: name={{dbname}}
+
+      - name: grant all privilidges to user
+        postgresql_user: db={{dbname}} name={{dbuser}} password={{dbpassword}} priv=ALL
+
+      - name: ensure user does not have unnecessary privilege
+        postgresql_user: name={{dbuser}} role_attr_flags=NOSUPERUSER,NOCREATEDB
 
 - hosts: all
   sudo: no
   gather_facts: no
   tasks:
-    #
-    # - name: create virtualenv
-    #   command: virtualenv /vagrant/myenv creates=/vagrant/myenv
-    #
-    # - name: Install python packages from requirment.txt
-    #   pip: requirements=/vagrant/requirements.txt  virtualenv=/vagrant/myenv
+
+    - name: create virtualenv
+      command: virtualenv /vagrant/myenv creates=/vagrant/myenv
+
+    - name: Install python packages from requirment.txt
+      pip: requirements=/vagrant/requirements.txt  virtualenv=/vagrant/myenv
+
     - name: Run django migrations
       shell: /vagrant/myenv/bin/python /vagrant/backend/manage.py migrate
 
