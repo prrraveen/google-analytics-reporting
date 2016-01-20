@@ -17,3 +17,7 @@ frontend/assets/libs
 
 # don't track npm packages
 frontend/build/node_modules
+
+
+# ignore virtualenv
+myenv

@@ -43,16 +43,13 @@ def signin(request):
         login(request, user)
         payload = UserSerializer(user)
         return HttpResponse(json.dumps({ 'profile' : payload.data , 'access_token' : 1234 }), status=200)
-    except ObjectDoesNotExist:
+    except (ObjectDoesNotExist,AnonymousUser) as e:
         return HttpResponse(status=503)
 
 
-def logout(request):
-    try:
-        logout(request) #django.contrib.auth.logout()
-        return HttpResponse(status=200)
-    except Exception,e:
-        return HttpResponse(status=500)
+def user_logout(request):
+    logout(request)
+    return HttpResponse(status=200)
 
 @api_view(['GET'])
 def get_all_users(request):
