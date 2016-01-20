@@ -23,14 +23,14 @@ def like_graph(request,username,type):
     '''
     data = []
     if type == 'hourly':
-        for hour in xrange(3,0,-1):
+        for hour in range(3,0,-1):
             start_datetime = timezone.now() - timedelta(hours=hour)
             end_datetime = timezone.now() - timedelta(hours=hour-1)
             user_likes , avg_user_likes = get_counts(username,start_datetime,end_datetime)
             data.append([end_datetime.hour, user_likes , avg_user_likes])
 
     elif type == 'day':
-        for day in xrange(3,0,-1):
+        for day in range(3,0,-1):
             start_datetime = timezone.now() - timedelta(days=day)
             end_datetime = timezone.now() - timedelta(days=day-1)
             user_likes , avg_user_likes = get_counts(username,start_datetime,end_datetime)
@@ -38,14 +38,14 @@ def like_graph(request,username,type):
 
     elif type == 'week':
         start_datetime = datetime.now() - timedelta(weeks=3)
-        for week in xrange(3,0,-1):
+        for week in range(3,0,-1):
             start_datetime = timezone.now() - timedelta(weeks=week)
             end_datetime = timezone.now() - timedelta(weeks=week-1)
             user_likes , avg_user_likes = get_counts(username,start_datetime,end_datetime)
             data.append([end_datetime.day, user_likes , avg_user_likes])
 
     elif type == 'month':
-        for month in xrange(3,0,-1):
+        for month in range(3,0,-1):
             start_datetime = timezone.now() - timedelta(month*365/12)
             end_datetime = timezone.now() - timedelta(month*365/12-30)
             user_likes , avg_user_likes = get_counts(username,start_datetime,end_datetime)
@@ -66,5 +66,9 @@ def get_counts(username,start_datetime,end_datetime):
                                            Q(time__lte = end_datetime)).count()
 
     all_distinct_user = Likes.objects.all().values('user').annotate(dcount= Count('user')).count()
-    avg_user_likes =  all_users_likes/float(all_distinct_user)
+
+    if all_distinct_user != 0:
+        avg_user_likes =  all_users_likes/float(all_distinct_user)
+    else:
+        avg_user_likes = 0
     return [user_likes,avg_user_likes]
