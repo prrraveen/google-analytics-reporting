@@ -11,7 +11,7 @@ Remarks:
 The project repositroy should be cloned to remote machine. Ansible playbook does this for us. It cloned repository from bitbuket using [SSH Key-Based Authentication](https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server).
 1. ssh-keygen command to generate new ssh key. *** DO NOT ENTER PASSPHRASE ***
 ```
-ssh-keygen -t rsa
+sudo ssh-keygen -t rsa
 ```
 2. use /etc/ssh/id_rsa to save the new key
 ```
@@ -19,8 +19,10 @@ Enter file in which to save the key (/home/tecmint/.ssh/id_rsa): /etc/ssh/id_rsa
 ```
 
 Follow these steps to create a new passwordless ssh key.
-```
-#!html
+
+[This is helpful tutorial to create ssh key](http://www.tecmint.com/ssh-passwordless-login-using-ssh-keygen-in-5-easy-steps/)
+
+
 <pre>
 <strong>[<strong style="color: green;">tecmint</strong>@tecmint.com ~]$ sudo ssh-keygen -t rsa
 </strong>
@@ -48,8 +50,33 @@ The key's randomart image is:
 +-----------------+
 
 </pre>
+
+Please make sure that /etc/ssh/id_rsa.pub exist.
+
+### Add newly created ssh key to bitbuket
+
+1. From Bitbucket Cloud, choose ***avatar > Bitbucket Settings*** from the application menu.
+The system displays the Account settings page.
+2. Click SSH keys.
+The SSH Keys page displays. If you have any existing keys, those appear on this page.
+3. Back in your terminal window, copy the contents of your public key file.
+For Linux you can cat the contents.
+
 ```
-[This is helpful tutorial to create ssh key](http://www.tecmint.com/ssh-passwordless-login-using-ssh-keygen-in-5-easy-steps/)
+$ cat /etc/ssh/id_rsa.pub
+```
+
+In Mac OSX, the following command copies the output to the clipboard:
+
+```
+$ pbcopy < /etc/ssh/id_rsa.pub
+```
+
+4. Back in your browser, enter a Label for your new key, for example, Default public key.
+5. Paste the copied public key into the SSH Key field.
+<img src='https://confluence.atlassian.com/bitbucket/files/304578655/add_ssh_key.png'>
+6. Press Add key.
+
 
 ### Install [Ansible](https://www.vagrantup.com/) in local machine
 Please follow the [official installation guide](http://docs.ansible.com/ansible/intro_installation.html)
@@ -101,7 +128,7 @@ We add .pem key to project folder so that Ansible config can find it. It is not 
 Switch to project root dir and run.
 
 ```
-ansible-playbook playbook.yml
+sudo ansible-playbook -vvv playbook.yml
 
 ```
 It will take a couple of minutes depending on your connection(15 minutes).
