@@ -99,7 +99,7 @@ We add .pem key to project folder so that Ansible config can find it. It is not 
 Switch to project root dir and run.
 
 ```
-ansible-playbook playbook.yml
+sudo ansible-playbook -vvv playbook.yml
 
 ```
 It will take a couple of minutes depending on your connection(15 minutes).
