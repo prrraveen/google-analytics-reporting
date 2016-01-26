@@ -15,7 +15,7 @@ ssh-keygen -t rsa
 ```
 
 Follow these steps to create a new passwordless ssh key.
-'''
+```
 #!html
 <pre>
 <strong>[<strong style="color: green;">tecmint</strong>@tecmint.com ~]$ sudo ssh-keygen -t rsa
@@ -44,7 +44,8 @@ The key's randomart image is:
 +-----------------+
 
 </pre>
-'''
+```
+
 
 [This is helpful tutorial to create ssh key](http://www.tecmint.com/ssh-passwordless-login-using-ssh-keygen-in-5-easy-steps/)
 
