@@ -21,3 +21,5 @@ frontend/build/node_modules
 
 # ignore virtualenv
 myenv
+
+.idea

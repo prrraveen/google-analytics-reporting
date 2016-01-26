@@ -1,9 +1,56 @@
-### Setup Development environment using Vagrant
+## Setup Production Server
+Remarks:
+* *** Local machine ***: local machine refers to the computer that a user is currently using. E.g. laptop or desktop machine you working on.
+* *** Remote machine/server *** : A remote machine is computer to which a user does not have physical access. E.g. AWS AMI
 
-#### Install [Vagrant](https://www.vagrantup.com/)
-Vagrant comes with installer. [download vagrant](https://www.vagrantup.com/downloads.html) based on your OS.
+* All the below steps are only performed on local machine.
+* Its good practice to create SSH key (ssh-keygen) before running playboook.
 
-#### Install [Ansible](https://www.vagrantup.com/)
+### create a password-less ssh key
+
+The project repositroy should be cloned to remote machine. Ansible playbook does this for us. It cloned repository from bitbuket using [SSH Key-Based Authentication](https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server).
+1. ssh-keygen command to generate new ssh key. *** DO NOT ENTER PASSPHRASE ***
+```
+ssh-keygen -t rsa
+```
+2. use /etc/ssh/id_rsa to save the new key
+```
+Enter file in which to save the key (/home/tecmint/.ssh/id_rsa): /etc/ssh/id_rsa
+```
+
+Follow these steps to create a new passwordless ssh key.
+
+<pre>
+<strong>[<strong style="color: green;">tecmint</strong>@tecmint.com ~]$ sudo ssh-keygen -t rsa
+</strong>
+
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/tecmint/.ssh/id_rsa): <span style="color: red;">[/etc/ssh/id_rsa]</span>
+Created directory '/home/tecmint/.ssh'.
+Enter passphrase (empty for no passphrase): <span style="color: red;">[Press enter key]</span>
+Enter same passphrase again: <span style="color: red;">[Press enter key]</span>
+Your identification has been saved in /home/tecmint/.ssh/id_rsa.
+Your public key has been saved in /home/tecmint/.ssh/id_rsa.pub.
+The key fingerprint is:
+5f:ad:40:00:8a:d1:9b:99:b3:b0:f8:08:99:c3:ed:d3 tecmint@tecmint.com
+The key's randomart image is:
++--[ RSA 2048]----+
+|        ..oooE.++|
+|         o. o.o  |
+|          ..   . |
+|         o  . . o|
+|        S .  . + |
+|       . .    . o|
+|      . o o    ..|
+|       + +       |
+|        +.       |
++-----------------+
+
+</pre>
+
+[This is helpful tutorial to create ssh key](http://www.tecmint.com/ssh-passwordless-login-using-ssh-keygen-in-5-easy-steps/)
+
+### Install [Ansible](https://www.vagrantup.com/) in local machine
 Please follow the [official installation guide](http://docs.ansible.com/ansible/intro_installation.html)
 OR follow the below steps to install it on ubuntu
 
@@ -19,228 +66,43 @@ sudo apt-get update
 sudo apt-get install ansible
 ```
 
-
-
-#### clone project repository
-
-```
-git clone git@bitbucket.org:pyramidtechnology/0280020703.git
-```
-#### Vagrant up
-use command to setup development server in one click.
-```
-vagrant up
-```
-It will take some time to setup full development.normally 10 minutes
-Once complete, You can access the app at localhost:8000
-
----
-
-### Setup Development environment without vagrant
-
-#### install git.
-```
-sudo apt-get install git
-```
-
-#### install python3-pip.
-```
-sudo apt-get install python3-pip
-```
-for more help please follow this [link](http://stackoverflow.com/questions/6587507/how-to-install-pip-with-python-)
-
-#### install dependencies for postgres
-```
-sudo apt-get install libpq-dev python-dev python-psycopg2
-```
-
-#### install dependencies for cryptography
-```
-sudo apt-get install build-essential libssl-dev libffi-dev
-```
-
-#### install  postgres
-```
-sudo apt-get install postgresql postgresql-contrib
-```
-
-#### Create the PostgreSQL Database and User
-
-To work with Postgres in its default configuration, it is best to change to the postgres system user temporarily. Do that now by typing:
-```
-sudo su - postgres
-```
-
-When operating as the postgres user, you can log right into a PostgreSQL interactive session with no further authentication by typing:
-
-```
-psql
-```
-You will be given a PostgreSQL prompt where we can set up our requirements.
-
-First, create a database for your project:
-```
-CREATE DATABASE testdb;
-```
-
-Next, create a database user for our project. Make sure to select a secure password:
-
-```
-CREATE USER testuser WITH PASSWORD 'password';
-```
-Now, we can give our new user access to administer our new database:
-```
-GRANT ALL PRIVILEGES ON DATABASE testdb TO testuser;
-```
-When you are finished, exit out of the PostgreSQL prompt by typing:
-```
-\q
-```
-Now, exit out of the postgres user's shell session to get back to your normal user's shell session by typing:
-
-```
-exit
-```
-
-#### Install nodejs
-Nodejs is required for frontend build tools.i.e bower and grunt
-```
-sudo apt-get install -y nodejs
-```
-
-#### Install NPM
-NPM is package manager for node packages
-```
-sudo apt-get install -y npm
-```
-
-#### symlink to treat node as nodejs
-We need to ask ununtu to tread name node as nodejs.
-```
-sudo ln -s /usr/bin/nodejs /usr/bin/node
-```
-
-#### clone project repository
-
-```
-git clone git@bitbucket.org:pyramidtechnology/0280020703.git
-```
-
-#### Install build tools
-change directory to test-project/frontend/build/
-
-```
-npm install
-```
-
-#### Install bower globally
-
-```
-npm install -g bower
-```
-
-
-#### Install bower packages
-change directory to test-project/frontend/build/
-
-```
-bower install
-```
-Bower installs packages to /frontend/assets/libs/
-
-
-#### setup git-pip.py to use latest pip version (use pip3.4 as pip)
-change directory to /test-project/config/
-```
-sudo python3 get-pip.py
-```
-
-
-#### install virtualenv.
-```
-pip install --upgrade virtualenv
-```
-sudo is not required if you have virtualenv -p python3 envnamepython3.4 and python3-pip modules.
-for more help please follow this [link](http://virtualenv.readthedocs.org/en/latest/installation.html)
-
-
-#### activate gunicorn
-```
-pip install gunicorn
-```
-
-#### activate virtualenv
-```
-source /opt/myenv/bin/activate
-```
-
-#### Install python packages for webapp
-change directory to /test-project/
-```
-sudo pip install -r requirements.txt
-```
-
-#### Run django migration
-change directory to /test-project/backend/
-```
-python manage.py migrate
-```
-
-#### Install bower package
-change directory to /home/ubuntu/test-project/frontend/build/
-```
-bower install
-```
-
-#### start django server
-change directory to /home/ubuntu/test-project/backend/
-```
-python manage.py runserver
-```
-
-### Setup Production Server
-
-#### Install Ansible
-Follow the above instruction to install Ansible
-
-#### Add public DSN or IP address to Ansible Inventory
+### Add public DSN or IP address to Ansible Inventory
 ```
 sudo nano /etc/ansible/hosts
 ```
-Add the server ip and sudo user
+Add the server IP and sudo user
 
 ```
 ec2-52-35-17-64.us-west-2.compute.amazonaws.com ansible_user=ubuntu
 ```
 
-#### copy .pem key to project directory
-Ansible playbook ssh using .pem key. It looks for it in project folder. Copy .pem file to project directory.
+### clone project repository
+```
+git clone git@bitbucket.org:pyramidtechnology/0280020703.git
+```
+
+### copy .pem key to project directory
+Ansible need to ssh in remote machine(server).
+There are two methods to SSH into the remote machine.
+* SSH using Password
+  * This method requires a sudo user & password
+* SSH with .pem key
+  * This method requires a .pem key instead of a password.
+
+AWS highly recommend using .pem key to ssh since it is more secure than a password. A password can be shared by word of mouth but a .pem key is limited to an authorized person.
+We add .pem key to project folder so that Ansible config can find it. It is not tracked in git. it is ignored in .gitignore file.
+
 ```
 /test-project/
 ```
 
-#### create a password-less ssh key
-Ansible will clone project repository from bitbucket by using host ssh key. The host ssh key should be passwordless/ without passphrase.
-
-On you host/local machine, run
-```
-ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
-
-```
-press enter when promt for password
-
-Add the ssh public key to bitbucket
-
-Github has nice documentation to help you with it.
-https://help.github.com/articles/generating-ssh-keys/
-
-#### run Ansible playbook
-switch to project root dir and run.
+#### Run Ansible playbook
+Switch to project root dir and run.
 
 ```
 ansible-playbook playbook.yml
 
 ```
-this will take some time(15 minutes).
+It will take a couple of minutes depending on your connection(15 minutes).
 
-You can access the webapp at public dns or ip address.
+You can access the web app at public DNS or IP address.
