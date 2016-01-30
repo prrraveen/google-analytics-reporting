@@ -17,12 +17,15 @@ function(
             'click @ui.submit': 'submit',
         },
 
-        submit: function(e){
-            if(this.ui.name.val() == ''
-                || this.ui.email.val() == ''
-                || this.ui.password.val() == '')
-            {
-                alert('Please fill all the details')
+        submit: function(){
+            try{
+                    if(this.ui.name.val() == '') throw 'name is required.'
+                    if(this.ui.email.val() == '') throw 'email is required.'
+                    if(this.ui.password.val() == '') throw 'password is required.'
+                    if(this.ui.confirm_password.val() == '') throw 'confirm password is required.'
+            }
+            catch(err){
+                alert(err)
                 return
             }
 
