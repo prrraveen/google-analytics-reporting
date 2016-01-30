@@ -23,6 +23,8 @@
     "underscore": "~1.8.3",
     "backbone.marionette": "marionette#~2.4.3",
     "requirejs": "~2.1.21",
-    "requirejs-plugins": "~1.0.3"
+    "requirejs-plugins": "~1.0.3",
+    "jasmine-core": "jasmine#~2.4.1",
+    "jasmine-jquery": "~2.1.1"
   }
 }

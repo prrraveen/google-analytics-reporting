@@ -3,6 +3,7 @@ from .views import *
 
 urlpatterns = patterns('',
     url(r'^$',  main),
+    url(r'^test$',  test),
     url(r'^user/signup/$',  signup), #user signup
     url(r'^user/signin/$',  signin),
     url(r'^user/all/$',  get_all_users),

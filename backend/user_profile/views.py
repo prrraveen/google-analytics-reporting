@@ -21,6 +21,12 @@ from .serializers import UserSerializer
 def main(request):
     return render_to_response('index.html')
 
+def test(request):
+    '''
+        This method is called to run Jasmine test cases.
+    '''
+    return render_to_response('test.html')
+
 @csrf_exempt
 @require_http_methods(["POST"])
 def signup(request):

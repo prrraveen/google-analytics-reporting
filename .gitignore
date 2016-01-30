@@ -23,3 +23,5 @@ frontend/build/node_modules
 myenv
 
 .idea
+
+Dockerfile
