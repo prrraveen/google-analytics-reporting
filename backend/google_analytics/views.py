@@ -75,6 +75,10 @@ def get_first_profile_id(service):
   return None
 
 def main(request,username,type):
+    '''
+        Main function to call google analytics reporting API to get curtom dimensions 'user-id-hit'
+        for @username
+    '''
     # Define the auth scopes to request.
     scope = ['https://www.googleapis.com/auth/analytics.readonly']
 
@@ -126,6 +130,9 @@ def get_results(userid,service, profile_id, type):
 
 
 def find_file(name, path):
+    '''
+        this method searched .p12 file which holds Authenticate key for google analytics
+    '''
     for root, dirs, files in os.walk(path):
         if name in files:
             return os.path.join(root, name)

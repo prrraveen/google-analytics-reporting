@@ -96,6 +96,7 @@ function (  Mn,
     'test/user/views/signin',
     'test/user/views/signup',
     'test/user/views/user_profile',
+    // 'test/home/views/navigation',
   ];
 
   // Load Jasmine - This will still create all of the normal Jasmine browser globals unless `boot.js` is re-written to use the

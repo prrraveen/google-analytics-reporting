@@ -1,3 +1,6 @@
-from django.test import TestCase
+'''
+    if no key file found 500 should be raised
+    if user doesn't exist 503 should be raised
 
-# Create your tests here.
+'''
+from django.test import TestCase

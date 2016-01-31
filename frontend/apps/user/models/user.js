@@ -52,7 +52,8 @@ function(
             $.ajax({
                 url: '/logout/',
                 type: 'GET',
-                success: function (shortlist_response) {
+                async: false,
+                success: function () {
                     _this.session.clean();
                     _this.clean_localstorage();
                 },

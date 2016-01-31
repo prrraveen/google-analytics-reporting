@@ -105,3 +105,16 @@ sudo ansible-playbook -vvv playbook.yml
 It will take a couple of minutes depending on your connection(15 minutes).
 
 You can access the web app at public DNS or IP address.
+
+
+## Running Frontend test Cases
+
+Test cases are accessible at http://domain/test/
+
+```
+http://localhost:8000/test/
+```
+or
+```
+http://ec2-52-35-17-64.us-west-2.compute.amazonaws.com/test
+```

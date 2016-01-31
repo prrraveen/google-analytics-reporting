@@ -19,17 +19,25 @@ from rest_framework.response import Response
 from .serializers import UserSerializer
 
 def main(request):
+    '''
+        This is the entry point of app.
+    '''
     return render_to_response('index.html')
 
 def test(request):
     '''
-        This method is called to run Jasmine test cases.
+        test.html is to render frontend test cases.
     '''
     return render_to_response('test.html')
 
 @csrf_exempt
 @require_http_methods(["POST"])
 def signup(request):
+    '''
+        A simple user registration.
+        It creates a new user if it does not exists already.
+        It throw status code 503 if user alredy exists
+    '''
     try:
         user = User.objects.get(email = request.POST['email'])
         return HttpResponse(status=503)
@@ -44,6 +52,13 @@ def signup(request):
 @csrf_exempt
 @require_http_methods(["POST"])
 def signin(request):
+    '''
+        user is authenticated using django.auth
+        if authenticated succeed, User is logedin. User is added to session.
+        User instance is serialized using django REST serializer.
+        In response, serialized user object and session key is sent.
+        503 status code is raise if authenticated fails
+    '''
     try:
         user = authenticate(username=request.POST['email'], password = request.POST['password'])
         login(request, user)
@@ -54,11 +69,19 @@ def signin(request):
 
 
 def user_logout(request):
+    '''
+        session key and session.user is destroyed
+    '''
     logout(request)
     return HttpResponse(status=200)
 
 @api_view(['GET'])
 def get_all_users(request):
+    '''
+        this method return all the users list.
+        UserSerializer is django REST serializer.
+        many=True is used to serialize more than one object
+    '''
     users = User.objects.all()
     payload = UserSerializer(users, many=True)
     return Response(payload.data)

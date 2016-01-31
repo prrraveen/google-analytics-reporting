@@ -20,7 +20,7 @@ __p += '<nav class="navbar navbar-default">\n  <div class="container-fluid">\n  
 ((__t = ( user.get_id() )) == null ? '' : __t) +
 '/' +
 ((__t = ( user.get_email() )) == null ? '' : __t) +
-'" class="btn btn-default btn-flat">User Profile</a>\n              </li>\n              <li class="user-footer">\n                  <a href="#logout" class="btn btn-default btn-flat">Sign out</a>\n              </li>\n          </ul>\n        </li>\n      </ul>\n    </div><!-- /.navbar-collapse -->\n  </div><!-- /.container-fluid -->\n</nav>\n';
+'" class="btn btn-default btn-flat">User Profile</a>\n              </li>\n              <li class="user-footer">\n                  <a href="#logout" id=\'logout\' class="btn btn-default btn-flat">Sign out</a>\n              </li>\n          </ul>\n        </li>\n      </ul>\n    </div><!-- /.navbar-collapse -->\n  </div><!-- /.container-fluid -->\n</nav>\n';
 
 }
 return __p

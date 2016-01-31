@@ -8,7 +8,13 @@ from django.db.models import Q
 from django.utils import timezone
 from .models import Likes
 from django.db.models import Count
+
 def increment(request,username):
+    '''
+        It is called when user click like button.
+        It created new entry to Likes table.
+        503 is raised if something goes wrong.
+    '''
     try:
         user = User.objects.get(username=username)
         like = Likes(user=user).save()
@@ -18,8 +24,13 @@ def increment(request,username):
 
 def like_graph(request,username,type):
     '''
-    make query on the like with le ge.
-    get the count
+    this method returns likes count and average like count for a time duration(hourl,day,week etc).
+    @data : holds the response object(payload).
+    get param "type" is checked for time duration(graph type).
+    @start_datetime: holds timestamp of beginning of the duration.
+    @end_datetime: holds timestamp of end of the duration.
+    the For loop with range itterates for every hour/day between start_datetime and end_datetime.
+    get_counts return an like count and avg_user_likes.
     '''
     data = []
     if type == 'hourly':
@@ -58,15 +69,19 @@ def like_graph(request,username,type):
 
 
 def get_counts(username,start_datetime,end_datetime):
+    '''
+        it returns an array of two variable [@user_likes ,@avg_user_likes].
+    '''
     user_likes = Likes.objects.filter(Q(user__username = username),
                                  Q(time__gte = start_datetime) &
                                  Q(time__lte = end_datetime)
-                                ).count()
+                                ).count() #returns count of user like for queried duration
     all_users_likes = Likes.objects.filter(Q(time__gte = start_datetime) &
-                                           Q(time__lte = end_datetime)).count()
+                                           Q(time__lte = end_datetime)).count() #it return user like for all users.
 
-    all_distinct_user = Likes.objects.all().values('user').annotate(dcount= Count('user')).count()
+    all_distinct_user = Likes.objects.all().values('user').annotate(dcount= Count('user')).count() # grouping user likes count
 
+    # calculating avg
     if all_distinct_user != 0:
         avg_user_likes =  all_users_likes/float(all_distinct_user)
     else:
