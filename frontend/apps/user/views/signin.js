@@ -14,16 +14,22 @@ function(
         ui: {
             email: '#email',
             password: '#password',
-            submit: '#create',
+            submit: '#submit',
         },
         events: {
             'click @ui.submit': 'submit',
         },
 
         submit: function(e){
-            if(this.ui.email.val() == ''
-                || this.ui.password.val() == '')
-            return;
+            try{
+                if(this.ui.email.val() == '') throw 'Email is required.'
+                if(this.ui.password.val() == '') throw 'Password is required.'
+            }
+            catch(err){
+                alert(err)
+                return
+            }
+
             var _this = this;
             $.post('/user/signin/',
             {

@@ -11,7 +11,7 @@ function(
             email: '#email',
             password: '#password',
             confirm_password: '#confirm-password',
-            submit: '#signup',
+            submit: '#submit',
         },
         events: {
             'click @ui.submit': 'submit',

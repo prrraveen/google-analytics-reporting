@@ -4,8 +4,8 @@
 define(['apps/user/views/signup',
         'jasmine-jquery',
         'mock-ajax',
-
 ],
+
 function (Signup
 ) {
     describe('View :: Signup', function () {
@@ -27,7 +27,7 @@ function (Signup
             //empty name field to test if raise exception
             signup.ui.name.val('');
 
-            signup.$el.find('#signup').trigger('click');
+            signup.$el.find('#submit').trigger('click');
             expect(window.alert).toHaveBeenCalledWith('name is required.');
         })
 
@@ -39,7 +39,7 @@ function (Signup
             //empty name field to test if raise exception
             signup.ui.email.val('');
 
-            signup.$el.find('#signup').trigger('click');
+            signup.$el.find('#submit').trigger('click');
             expect(window.alert).toHaveBeenCalledWith('email is required.');
         })
 
@@ -51,7 +51,7 @@ function (Signup
             //empty name field to test if raise exception
             signup.ui.password.val('');
 
-            signup.$el.find('#signup').trigger('click');
+            signup.$el.find('#submit').trigger('click');
             expect(window.alert).toHaveBeenCalledWith('password is required.');
         })
 
@@ -63,7 +63,7 @@ function (Signup
             //empty name field to test if raise exception
             signup.ui.confirm_password.val('');
 
-            signup.$el.find('#signup').trigger('click');
+            signup.$el.find('#submit').trigger('click');
             expect(window.alert).toHaveBeenCalledWith('confirm password is required.');
         })
 
@@ -75,7 +75,7 @@ function (Signup
             //empty name field to test if raise exception
             signup.ui.confirm_password.val('something_else');
 
-            signup.$el.find('#signup').trigger('click');
+            signup.$el.find('#submit').trigger('click');
             expect(window.alert).toHaveBeenCalledWith('password Doesn\'t match');
         })
 
@@ -88,15 +88,9 @@ function (Signup
 
             spyOn($, "ajax").and.callThrough();
 
-            signup.$el.find('#signup').trigger('click'); //triggering submit form event
+            signup.$el.find('#submit').trigger('click'); //triggering submit form event
 
             expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual("/user/signup/");
-        })
-
-        it('On success, redirect to login', function () {
-            spyOn($, "ajax").and.callThrough();
-            spyOn(this, 'done');
-            signup.$el.find('#signup').trigger('click'); //triggering submit form event
         })
 
     })

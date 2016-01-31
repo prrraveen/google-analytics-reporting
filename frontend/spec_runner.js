@@ -93,6 +93,7 @@ function (  Mn,
 
 // Define all of your specs here. These are RequireJS modules.
   var specs = [
+    'test/user/views/signin',
     'test/user/views/signup',
   ];
 
