@@ -59,9 +59,9 @@ function(
         onRender: function(){
             /* A marionette method, called when el is rendered.
             */
-            if(this.page_views.hasView()==false)
-                this.page_views.show(new View_graph({username : this.username}));
-
+            if(this.getRegion('page_views').hasView()==false)
+                this.getRegion('page_views').show(new View_graph({username : this.username}));
+                
             //disable like button if the profile belongs to signin user
             if(this.username == this.model.get_email())
             {

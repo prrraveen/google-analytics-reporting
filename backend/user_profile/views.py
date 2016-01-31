@@ -48,7 +48,7 @@ def signin(request):
         user = authenticate(username=request.POST['email'], password = request.POST['password'])
         login(request, user)
         payload = UserSerializer(user)
-        return HttpResponse(json.dumps({ 'profile' : payload.data , 'access_token' : 1234 }), status=200)
+        return HttpResponse(json.dumps({ 'profile' : payload.data , 'access_token' : request.session.session_key }), status=200)
     except (ObjectDoesNotExist,AnonymousUser) as e:
         return HttpResponse(status=503)
 
