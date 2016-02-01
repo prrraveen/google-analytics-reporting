@@ -11,6 +11,7 @@ function(
         graph_type: 'day', //setting up defaul graph type
 
         initialize: function(options){
+            //attach option attibutes to this view (options has username)
             _.extend(this,options);
         },
 
@@ -19,16 +20,20 @@ function(
         },
 
         events:{
-            'click @ui.x_axis_duration': 'change_x_axis_scale',
+            'click @ui.x_axis_duration': 'change_x_axis_scale', //change the graph type  day , month etc
         },
 
         onRender: function(){
+            //after redering the el , create a Ga_collection
             this.collection = new Ga_collection({username :this.username});
+            //get_graph_data will fetch google analytics data from server
             this.get_graph_data()
         },
 
         get_graph_data: function(){
-
+            /* this method G.A. fetch data from server.
+                on success it calls method make_graph which prepares data for graph
+            */
             var _this = this;
 
             this.collection.change_graph_type(graph_type = this.graph_type);
@@ -43,15 +48,20 @@ function(
         },
 
         make_graph: function(data){
-            this.make_data(data);
-            this.render_graph();
+            /* make_date prepares data and data format required for google graph
+            */
+            this.make_data(data); //prepare data
+            this.render_graph(); //render google graph with prepared data
         },
 
         make_data: function(data){
+            /*
+                prepares data format require for google graph
+            */
             var _this = this;
-            this.data = new google.visualization.DataTable();
-            this.data.addColumn('number', 'PageViews');
-            this.data.addColumn('number', this.graph_type);
+            this.data = new google.visualization.DataTable(); //instace of DataTable. Datatable is two cross two matrix in this case
+            this.data.addColumn('number', 'PageViews'); //adding a colum or.. y axis page view number
+            this.data.addColumn('number', this.graph_type); //adding x graph scale number , which represent hours or day of the month
 
             data.rows.forEach(function(row){
                 _this.data.addRow([+row[0] , +row[1]])
@@ -59,6 +69,9 @@ function(
         },
 
         render_graph: function(){
+            /* preparing graph
+                some option are created
+            */
             var options = {
             //   title: 'Page Views',
               width: 850,
@@ -68,9 +81,9 @@ function(
               vAxis: { format: ''}
             };
 
-            var container = $(this.el).find('#gchart')[0];
-            var chart = new google.visualization.LineChart(container);
-            chart.draw(this.data,options);
+            var container = $(this.el).find('#gchart')[0]; //DOM element to insert graph
+            var chart = new google.visualization.LineChart(container); //we are using LINEChart graph
+            chart.draw(this.data,options); //passing data and option.
         },
 
         change_x_axis_scale: function(e){

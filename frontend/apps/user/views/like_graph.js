@@ -11,6 +11,7 @@ function(
         graph_type: 'day', //setting up defaul graph type
 
         initialize: function(options){
+            // Immediately add a pageview event to the queue.
             _.extend(this,options);
         },
 
@@ -19,15 +20,20 @@ function(
         },
 
         events:{
-            'click @ui.x_axis_duration': 'change_x_axis_scale',
+            'click @ui.x_axis_duration': 'change_x_axis_scale', //change the graph type  day , month etc
         },
 
         onRender: function(){
+            //after redering the el , create a Like_collection
             this.collection = new Like_collection({username :this.username});
+            //get_graph_data will fetch google analytics data from server
             this.get_graph_data()
         },
 
         get_graph_data: function(){
+            /* this method fetch user like data from server.
+                on success it calls method make_graph which prepares data for graph
+            */
             var _this = this;
             this.collection.change_graph_type(graph_type = this.graph_type);
             this.collection.fetch({
@@ -41,13 +47,20 @@ function(
         },
 
         make_graph: function(data){
-            this.make_data(data);
-            this.render_graph();
+            /* make_date prepares data and data format required for google graph
+            */
+
+            this.make_data(data); //prepare data
+            this.render_graph();  //render google graph with prepared data
         },
 
         make_data: function(data){
+            /*
+                prepares data format require for google graph
+            */
+
             var _this = this;
-            this.data = new google.visualization.DataTable();
+            this.data = new google.visualization.DataTable(); //instace of DataTable. Datatable is two cross two matrix in this case
             this.data.addColumn('string', this.graph_type);
             this.data.addColumn('number', 'Likes');
             this.data.addColumn('number', 'Avg Likes');
@@ -57,6 +70,10 @@ function(
         },
 
         render_graph: function(){
+            /* preparing graph
+                some option are created
+            */
+
             var options = {
             //   title: 'Page Views',
               width: 850,
@@ -66,9 +83,9 @@ function(
               vAxis: { format: ''}
             };
 
-            var container = $(this.el).find('#like-chart')[0];
-            var chart = new google.visualization.ColumnChart(container);
-            chart.draw(this.data,options);
+            var container = $(this.el).find('#like-chart')[0]; //DOM element to insert graph
+            var chart = new google.visualization.ColumnChart(container); //we are using LINEChart graph
+            chart.draw(this.data,options); //passing data and option.
         },
 
         change_x_axis_scale: function(e){

@@ -1,8 +1,8 @@
 ---
 - hosts: all
- sudo: yes
- gather_facts: no
- tasks:
+  sudo: yes
+  gather_facts: no
+  tasks:
        - name: apt get update
          apt: update_cache=yes
 
@@ -45,24 +45,24 @@
 
 
 - hosts: all
- sudo: yes
- sudo_user: postgres
- gather_facts: no
+  sudo: yes
+  sudo_user: postgres
+  gather_facts: no
 
- vars:
-   dbname: testdb
-   dbuser: testuser
-   dbpassword: password
+  vars:
+    dbname: testdb
+    dbuser: testuser
+    dbpassword: password
 
- tasks:
-     - name: create database
-       postgresql_db: name={{dbname}}
+  tasks:
+      - name: create database
+        postgresql_db: name={{dbname}}
 
-     - name: grant all privilidges to user
-       postgresql_user: db={{dbname}} name={{dbuser}} password={{dbpassword}} priv=ALL
+      - name: grant all privilidges to user
+        postgresql_user: db={{dbname}} name={{dbuser}} password={{dbpassword}} priv=ALL
 
-     - name: ensure user does not have unnecessary privilege
-       postgresql_user: name={/ssh-rsa{dbuser}} role_attr_flags=NOSUPERUSER,NOCREATEDB
+      - name: ensure user does not have unnecessary privilege
+        postgresql_user: name={/ssh-rsa{dbuser}} role_attr_flags=NOSUPERUSER,NOCREATEDB
 
 
 - hosts: all
@@ -71,10 +71,10 @@
   tasks:
    - name: copy the Github SSH public key file
      copy: src="/etc/ssh/id_rsa.pub"
-           dest="/home/ubuntu/.ssh/id_rsa.pub"
-           mode=0644
-           owner=ubuntu
-           group=ubuntu
+      dest="/home/ubuntu/.ssh/id_rsa.pub"
+      mode=0644
+      owner=ubuntu
+      group=ubuntu
 
    - name: copy the Github SSH private key file
      copy: src="/etc/ssh/id_rsa"
@@ -83,32 +83,31 @@
            owner=ubuntu
            group=ubuntu
 
-    - name: Setup the Git repo
-      sudo: no
-      git: repo=git@bitbucket.org:pyramidtechnology/0280020703.git
+   - name: Setup the Git repo
+     sudo: no
+     git: repo=git@bitbucket.org:pyramidtechnology/0280020703.git
            version=master
            dest="/home/ubuntu/test-project.git"
            accept_hostkey=yes
            bare=yes
-           depth=1
            key_file="/home/ubuntu/.ssh/id_rsa_github"
 
-    - name: Creates work directory
-      file: path=/home/ubuntu/test-project state=directory
+   - name: Creates work directory
+     file: path=/home/ubuntu/test-project state=directory
 
-    - name: checkout in working directory
-      shell: git --work-tree=/home/ubuntu/test-project --git-dir=/home/ubuntu/test-project.git checkout -f
+   - name: checkout in working directory
+     shell: git --work-tree=/home/ubuntu/test-project --git-dir=/home/ubuntu/test-project.git checkout -f
 
-    - name: create post-receive file in githook
-      file: path=/home/ubuntu/test-project.git/hooks/post-receive state=touch group=ubuntu mode="u=rwx,g=rx,o=r"
+   - name: create post-receive file in githook
+     file: path=/home/ubuntu/test-project.git/hooks/post-receive state=touch group=ubuntu mode="u=rwx,g=rx,o=r"
 
     # Add a line to a file if it does not exist, without passing regexp
-    - name: add executable env
-      lineinfile: dest=/home/ubuntu/test-project.git/hooks/post-receive
+   - name: add executable env
+     lineinfile: dest=/home/ubuntu/test-project.git/hooks/post-receive
                   line="#!/bin/sh" state=present insertbefore=BOF
 
-    - name: add checkout line
-      lineinfile: dest=/home/ubuntu/test-project.git/hooks/post-receive
+   - name: add checkout line
+     lineinfile: dest=/home/ubuntu/test-project.git/hooks/post-receive
                   line="git --work-tree=/home/ubuntu/test-project --git-dir=/home/ubuntu/test-project.git checkout -f" state=present insertbefore=EOF
 
 - hosts: all
