@@ -3,13 +3,13 @@ import json
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AnonymousUser
+
 from django.contrib.auth import authenticate, login, logout
 
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
-
 from rest_framework.decorators import api_view
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
@@ -64,9 +64,9 @@ def signin(request):
         login(request, user)
         payload = UserSerializer(user)
         return HttpResponse(json.dumps({ 'profile' : payload.data , 'access_token' : request.session.session_key }), status=200)
-    except (ObjectDoesNotExist,AnonymousUser) as e:
+    except Exception,e:
+        print '@sigin {}'.format(e)
         return HttpResponse(status=503)
-
 
 def user_logout(request):
     '''
