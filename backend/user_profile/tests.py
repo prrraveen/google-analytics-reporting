@@ -108,4 +108,4 @@ class LoginTest(TestCase):
         """
         response = self.client.post('/user/signin/',{'email': self.user.email,
                                                      'password': 'password'}) #need to use plain password, since self.user.password is salted after save
-        self.assertEqual(response.status_code, 200) #503 is raised when user already existing
+        self.assertEqual(response.status_code, 200)

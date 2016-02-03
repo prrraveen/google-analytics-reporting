@@ -88,7 +88,7 @@ def main(request,username,type):
 
     key_file = find_file('key.p12',BASE_DIR)
 
-    # Authenticate and construct service.
+    # Authenticate and construct service. Service is explained in method get_service
     service = get_service('analytics', 'v3', scope, key_file, service_account_email)
     profile = get_first_profile_id(service)
     try:

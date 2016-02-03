@@ -1,58 +1,34 @@
 ## Setup Production Server
 Remarks:
-* *** Local machine ***: local machine refers to the computer that a user is currently using. E.g. laptop or desktop machine you working on.
-* *** Remote machine/server *** : A remote machine is computer to which a user does not have physical access. E.g. AWS AMI
+---
+* ***Local machine***: local machine refers to the computer that a user is currently using. E.g. laptop or desktop machine you working on.
+* ***Remote machine/server*** : A remote machine is computer to which a user does not have physical access. E.g. AWS AMI
 
 * All the below steps are only performed on local machine.
 * Its good practice to create SSH key (ssh-keygen) before running playboook.
 
 ### create a password-less ssh key
 
-The project repositroy should be cloned to remote machine. Ansible playbook does this for us. It cloned repository from bitbuket using [SSH Key-Based Authentication](https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server).
+The project repository should be cloned to remote machine. Ansible playbook does this for us. It clones repository from bitbuket using [SSH Key-Based Authentication](https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server).
+
 1. ssh-keygen command to generate new ssh key. *** DO NOT ENTER PASSPHRASE ***
 ```
 ssh-keygen -t rsa
 ```
+2. When prompt for "Enter file in which to save the key" type `/etc/ssh/`  
+
+3. press enter when prompt for "Enter passphrase" and "Enter same passphrase again"
 
 Follow these steps to create a new passwordless ssh key.
-```
-#!html
-<pre>
-<strong>[<strong style="color: green;">tecmint</strong>@tecmint.com ~]$ sudo ssh-keygen -t rsa
-</strong>
-
-Generating public/private rsa key pair.
-Enter file in which to save the key (/home/tecmint/.ssh/id_rsa): <span style="color: red;">[Press enter key]</span>
-Created directory '/home/tecmint/.ssh'.
-Enter passphrase (empty for no passphrase): <span style="color: red;">[Press enter key]</span>
-Enter same passphrase again: <span style="color: red;">[Press enter key]</span>
-Your identification has been saved in /home/tecmint/.ssh/id_rsa.
-Your public key has been saved in /home/tecmint/.ssh/id_rsa.pub.
-The key fingerprint is:
-5f:ad:40:00:8a:d1:9b:99:b3:b0:f8:08:99:c3:ed:d3 tecmint@tecmint.com
-The key's randomart image is:
-+--[ RSA 2048]----+
-|        ..oooE.++|
-|         o. o.o  |
-|          ..   . |
-|         o  . . o|
-|        S .  . + |
-|       . .    . o|
-|      . o o    ..|
-|       + +       |
-|        +.       |
-+-----------------+
-
-</pre>
-```
 
 
 [This is helpful tutorial to create ssh key](http://www.tecmint.com/ssh-passwordless-login-using-ssh-keygen-in-5-easy-steps/)
 
 ### Install [Ansible](https://www.vagrantup.com/) in local machine
 Please follow the [official installation guide](http://docs.ansible.com/ansible/intro_installation.html)
-OR follow the below steps to install it on ubuntu
 
+OR follow the below steps to install it on ubuntu
+<img src='frontend/assets/images/readme_ssh.png'/>
 ```
 sudo apt-get update
 
@@ -117,4 +93,17 @@ http://localhost:8000/test/
 or
 ```
 http://ec2-52-35-17-64.us-west-2.compute.amazonaws.com/test
+```
+
+## Running Backend test Cases
+1. setup django project on your local machine by [following the steps to step guide in wiki](https://bitbucket.org/pyramidtechnology/0280020703/wiki/Setting%20up%20development%20environment.)
+
+2. Switch to
+```
+    ~/test-project/backend/
+```
+3. Run Tests
+Assuming virtualenv is active
+```
+    python manage.py test
 ```
